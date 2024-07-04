@@ -21,4 +21,4 @@ runs:
       shell: bash
       env:
         TASK_NAME: ${{ inputs.task-name }}
-        TODOIST_API_TOKEN: ${{ secrets.todoist-api-token }}
+        TODOIST_API_TOKEN: ${{ secrets.TODOIST_API_TOKEN }}
