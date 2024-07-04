@@ -13,15 +13,20 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Run cURL command
-      run: >
-        curl "https://api.todoist.com/rest/v2/tasks"
-        -X POST
-        --data '{"content": "'$TASK_NAME'"}'
-        -H "Content-Type: application/json"
-        -H "X-Request-Id: $(uuidgen)"
-        -H "Authorization: Bearer $TODOIST_API_TOKEN"
+    - name: Create request body JSON file
       shell: bash
       env:
         TASK_NAME: ${{ inputs.task-name }}
+      run: echo '{"content": "'"$TASK_NAME"'"}' > request-body.json
+    
+    - name: Run cURL command
+      shell: bash
+      env:
         TODOIST_API_TOKEN: ${{ inputs.todoist-api-token }}
+      run: >
+        curl "https://api.todoist.com/rest/v2/tasks"
+        -X POST
+        -d @request-body.json
+        -H "Content-Type: application/json"
+        -H "X-Request-Id: $(uuidgen)"
+        -H "Authorization: Bearer $TODOIST_API_TOKEN"
