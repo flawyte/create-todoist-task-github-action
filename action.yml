@@ -17,7 +17,9 @@ runs:
       shell: bash
       env:
         TASK_NAME: ${{ inputs.task-name }}
-      run: echo '{"content": "'"$TASK_NAME"'"}' > request-body.json
+      run: |
+        touch request-body.json
+        echo '{"content": "'"$TASK_NAME"'"}' >> request-body.json
     
     - name: Run cURL command
       shell: bash
