@@ -1,0 +1,24 @@
+name: 'Todoist: Create Task'
+author: 'Mickaël Allonneau'
+description: 'Creates a task in Todoist'
+
+inputs:
+  task-name:
+    description: 'The name of the task'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Run cURL command
+      run: >
+        curl "https://api.todoist.com/rest/v2/tasks"
+        -X POST
+        --data '{"content": "'$TASK_NAME'"}'
+        -H "Content-Type: application/json"
+        -H "X-Request-Id: $(uuidgen)"
+        -H "Authorization: Bearer $TODOIST_API_TOKEN"
+      shell: bash
+      env:
+        TASK_NAME: ${{ inputs.task-name }}
+        TODOIST_API_TOKEN: ${{ secrets.todoist-api-token }}
