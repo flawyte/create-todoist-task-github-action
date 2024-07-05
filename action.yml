@@ -12,10 +12,13 @@ inputs:
     required: true
   task-priority:
     description: 'Task priority from 1 (normal) to 4 (urgent).'
+    required: true
   task-project-id:
     description: "Task project ID. If not set, task is put to user's Inbox."
+    required: true
   task-section-id:
     description: 'ID of section to put task into.'
+    required: true
 
 runs:
   using: 'composite'
