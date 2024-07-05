@@ -2,13 +2,20 @@ name: 'Todoist: Create Task'
 author: 'Mickaël Allonneau'
 description: 'Creates a task in Todoist'
 
+# Inputs' descriptions taken from the official Todoist API doc: https://developer.todoist.com/rest/v2/#create-a-new-task
 inputs:
   task-name:
-    description: 'The name of the task'
+    description: 'Task content [or name]. This value may contain markdown-formatted text and hyperlinks. Details on markdown support can be found in the Text Formatting article in the Help Center.'
     required: true
   todoist-api-token:
-    description: 'The Todoist API token of the account to create the task in'
+    description: 'The Todoist API token of the account to create the task in.'
     required: true
+  task-priority:
+    description: 'Task priority from 1 (normal) to 4 (urgent).'
+  task-project-id:
+    description: "Task project ID. If not set, task is put to user's Inbox."
+  task-section-id:
+    description: 'ID of section to put task into.'
 
 runs:
   using: 'composite'
@@ -17,9 +24,13 @@ runs:
       shell: bash
       env:
         TASK_NAME: ${{ inputs.task-name }}
+        TASK_PRIORITY: ${{ inputs.task-priority }}
+        TASK_PROJECT_ID: ${{ inputs.task-project-id }}
+        TASK_SECTION_ID: ${{ inputs.task-section-id }}
       run: |
         touch request-body.json
-        echo '{"content": "'"$TASK_NAME"'"}' >> request-body.json
+        echo '{"content": "'"$TASK_NAME"'", "project_id": "'"$TASK_PROJECT_ID"'", "priority": '$TASK_PRIORITY', "section_id": "'"$TASK_SECTION_ID"'"}' >> request-body.json
+        cat request-body.json
     
     - name: Run cURL command
       shell: bash
