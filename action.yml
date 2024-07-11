@@ -23,35 +23,23 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Create request body JSON file
-      shell: bash
-      env:
-        TASK_NAME: ${{ inputs.task-name }}
-        TASK_PRIORITY: ${{ inputs.task-priority }}
-        TASK_PROJECT_ID: ${{ inputs.task-project-id }}
-        TASK_SECTION_ID: ${{ inputs.task-section-id }}
-      run: |
-        touch request-body.json
-        echo '{"content": "'"$TASK_NAME"'", "project_id": "'"$TASK_PROJECT_ID"'", "priority": '$TASK_PRIORITY', "section_id": "'"$TASK_SECTION_ID"'"}' >> request-body.json
-        cat request-body.json
-
-    - name: Create cURL request body JSON (new)
+    - name: Create cURL request's JSON body
       env:
         TASK_NAME: ${{ inputs.task-name }}
         TASK_PRIORITY: ${{ inputs.task-priority }}
         TASK_PROJECT_ID: ${{ inputs.task-project-id }}
         TASK_SECTION_ID: ${{ inputs.task-section-id }}
       shell: bash
-      run: $GITHUB_ACTION_PATH/create-curl-request-body-json.sh
+      run: $GITHUB_ACTION_PATH/create-curl-request-json-body.sh
 
-    # - name: Run cURL command
-    #   env:
-    #     TODOIST_API_TOKEN: ${{ inputs.todoist-api-token }}
-    #   shell: bash
-    #   run: >
-    #     curl "https://api.todoist.com/rest/v2/tasks"
-    #     -X POST
-    #     -d @curl-request-body.json
-    #     -H "Authorization: Bearer $TODOIST_API_TOKEN"
-    #     -H "Content-Type: application/json"
-    #     -H "X-Request-Id: $(uuidgen)"
+    - name: Run cURL command
+      env:
+        TODOIST_API_TOKEN: ${{ inputs.todoist-api-token }}
+      shell: bash
+      run: >
+        curl "https://api.todoist.com/rest/v2/tasks"
+        -X POST
+        -d @curl-request-body.json
+        -H "Authorization: Bearer $TODOIST_API_TOKEN"
+        -H "Content-Type: application/json"
+        -H "X-Request-Id: $(uuidgen)"
