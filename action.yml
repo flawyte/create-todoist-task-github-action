@@ -2,23 +2,23 @@ name: 'Todoist: Create Task'
 author: 'Mickaël Allonneau'
 description: 'Creates a task in Todoist'
 
-# Inputs' descriptions taken from the official Todoist API doc: https://developer.todoist.com/rest/v2/#create-a-new-task
+# Inputs' descriptions are taken from the official Todoist API doc: https://developer.todoist.com/rest/v2/#create-a-new-task
 inputs:
   task-name:
-    description: 'Task content [or name]. This value may contain markdown-formatted text and hyperlinks. Details on markdown support can be found in the Text Formatting article in the Help Center.'
+    description: "Task content [or name]. This value may contain markdown-formatted text and hyperlinks. Details on markdown support can be found in the Text Formatting article in [Todoist's] Help Center."
     required: true
   todoist-api-token:
     description: 'The Todoist API token of the account to create the task in.'
     required: true
   task-priority:
     description: 'Task priority from 1 (normal) to 4 (urgent).'
-    required: true
+    required: false
   task-project-id:
     description: "Task project ID. If not set, task is put to user's Inbox."
-    required: true
+    required: false
   task-section-id:
     description: 'ID of section to put task into.'
-    required: true
+    required: false
 
 runs:
   using: 'composite'
@@ -34,15 +34,24 @@ runs:
         touch request-body.json
         echo '{"content": "'"$TASK_NAME"'", "project_id": "'"$TASK_PROJECT_ID"'", "priority": '$TASK_PRIORITY', "section_id": "'"$TASK_SECTION_ID"'"}' >> request-body.json
         cat request-body.json
-    
-    - name: Run cURL command
-      shell: bash
+
+    - name: Create cURL request body JSON (new)
       env:
-        TODOIST_API_TOKEN: ${{ inputs.todoist-api-token }}
-      run: >
-        curl "https://api.todoist.com/rest/v2/tasks"
-        -X POST
-        -d @request-body.json
-        -H "Content-Type: application/json"
-        -H "X-Request-Id: $(uuidgen)"
-        -H "Authorization: Bearer $TODOIST_API_TOKEN"
+        TASK_NAME: ${{ inputs.task-name }}
+        TASK_PRIORITY: ${{ inputs.task-priority }}
+        TASK_PROJECT_ID: ${{ inputs.task-project-id }}
+        TASK_SECTION_ID: ${{ inputs.task-section-id }}
+      shell: bash
+      run: $GITHUB_ACTION_PATH/create-curl-request-body-json.sh
+
+    # - name: Run cURL command
+    #   env:
+    #     TODOIST_API_TOKEN: ${{ inputs.todoist-api-token }}
+    #   shell: bash
+    #   run: >
+    #     curl "https://api.todoist.com/rest/v2/tasks"
+    #     -X POST
+    #     -d @curl-request-body.json
+    #     -H "Authorization: Bearer $TODOIST_API_TOKEN"
+    #     -H "Content-Type: application/json"
+    #     -H "X-Request-Id: $(uuidgen)"
