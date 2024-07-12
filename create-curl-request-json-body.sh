@@ -47,7 +47,7 @@ if [ -n "$TASK_DURATION_UNIT" ]; then
 fi
 
 if [ -n "$TASK_LABELS" ]; then
-  echo '  ,"labels": "'$TASK_LABELS'"' >> $FILENAME
+  echo '  ,"labels": '$TASK_LABELS >> $FILENAME
 fi
 
 if [ -n "$TASK_ORDER" ]; then
