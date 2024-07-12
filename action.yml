@@ -2,7 +2,7 @@ name: 'Todoist: Create Task'
 author: 'Mickaël Allonneau'
 description: 'Creates a task in Todoist'
 
-# Inputs' descriptions are taken from the official Todoist API doc: https://developer.todoist.com/rest/v2/#create-a-new-task
+# Inputs' descriptions are taken from the official Todoist API documentation: https://developer.todoist.com/rest/v2/#create-a-new-task
 inputs:
   task-name:
     description: "Task content [or name]. This value may contain markdown-formatted text and hyperlinks. Details on markdown support can be found in the Text Formatting article in [Todoist's] Help Center."
@@ -10,6 +10,40 @@ inputs:
   todoist-api-token:
     description: 'The Todoist API token of the account to create the task in.'
     required: true
+
+  task-assignee-id:
+    description: 'The responsible user ID (only applies to shared tasks).'
+    required: false
+  task-description:
+    description: "A description for the task. This value may contain markdown-formatted text and hyperlinks. Details on markdown support can be found in the Text Formatting article in [Todoist's] Help Center."
+    required: false
+  task-due-date:
+    description: "Specific date in `YYYY-MM-DD` format relative to user's timezone."
+    required: false
+  task-due-datetime:
+    description: 'Specific date and time in RFC3339 format in UTC.'
+    required: false
+  task-due-lang:
+    description: '2-letter code specifying language in case `due_string` is not written in English.'
+    required: false
+  task-due-string:
+    description: 'Human defined task due date (ex.: "next Monday", "Tomorrow"). Value is set using local (not UTC) time.'
+    required: false
+  task-duration:
+    description: 'A positive (greater than zero) integer for the amount of `duration_unit` the task will take. If specified, you **must** define a `duration_unit`.'
+    required: false
+  task-duration-unit:
+    description: 'The unit of time that the `duration` field above represents. Must be either `minute` or `day`. If specified, `duration` **must** be defined as well.'
+    required: false
+  task-labels:
+    description: "The task's labels (a list of names that may represent either personal or shared labels)."
+    required: false
+  task-order:
+    description: 'Non-zero integer value used by clients to sort tasks under the same parent.'
+    required: false
+  task-parent-id:
+    description: 'Parent task ID.'
+    required: false
   task-priority:
     description: 'Task priority from 1 (normal) to 4 (urgent).'
     required: false
@@ -25,7 +59,18 @@ runs:
   steps:
     - name: Create cURL request's JSON body
       env:
+        TASK_ASSIGNEE_ID: ${{ inputs.task-assignee-id }}
+        TASK_DESCRIPTION: ${{ inputs.task-description }}
+        TASK_DUE_DATE: ${{ inputs.task-due-date }}
+        TASK_DUE_DATETIME: ${{ inputs.task-due-datetime }}
+        TASK_DUE_LANG: ${{ inputs.task-due-lang }}
+        TASK_DUE_STRING: ${{ inputs.task-due-string }}
+        TASK_DURATION: ${{ inputs.task-duration }}
+        TASK_DURATION_UNIT: ${{ inputs.task-duration-unit }}
+        TASK_LABELS: ${{ inputs.task-labels }}
         TASK_NAME: ${{ inputs.task-name }}
+        TASK_ORDER: ${{ inputs.task-order }}
+        TASK_PARENT_ID: ${{ inputs.task-parent-id }}
         TASK_PRIORITY: ${{ inputs.task-priority }}
         TASK_PROJECT_ID: ${{ inputs.task-project-id }}
         TASK_SECTION_ID: ${{ inputs.task-section-id }}
@@ -37,9 +82,9 @@ runs:
         TODOIST_API_TOKEN: ${{ inputs.todoist-api-token }}
       shell: bash
       run: >
-        curl "https://api.todoist.com/rest/v2/tasks"
+        curl 'https://api.todoist.com/rest/v2/tasks'
         -X POST
         -d @curl-request-body.json
         -H "Authorization: Bearer $TODOIST_API_TOKEN"
-        -H "Content-Type: application/json"
+        -H 'Content-Type: application/json'
         -H "X-Request-Id: $(uuidgen)"
