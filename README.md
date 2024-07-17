@@ -3,6 +3,26 @@
 Input descriptions are taken from the [official Todoist API documentation](https://developer.todoist.com/rest/v2/#create-a-new-task).
 
 <!--(inputs-start)-->
+
+| Name  | Required | Default | Description |
+| :---: | :------: | :-----: | ----------- |
+| `task-name` | true |  | Task content [or name]. This value may contain markdown-formatted text and hyperlinks. Details on markdown support can be found in the Text Formatting article in [Todoist's] Help Center. |
+| `todoist-api-token` | true |  | The Todoist API token of the account to create the task in. |
+| `task-assignee-id` | false |  | The responsible user ID (only applies to shared tasks). |
+| `task-description` | false |  | A description for the task. This value may contain markdown-formatted text and hyperlinks. Details on markdown support can be found in the Text Formatting article in [Todoist's] Help Center. |
+| `task-due-date` | false |  | Specific date in `YYYY-MM-DD` format relative to user's timezone. |
+| `task-due-datetime` | false |  | Specific date and time in RFC3339 format in UTC. |
+| `task-due-lang` | false |  | 2-letter code specifying language in case `due_string` is not written in English. |
+| `task-due-string` | false |  | Human defined task due date (ex.: "next Monday", "Tomorrow"). Value is set using local (not UTC) time. |
+| `task-duration` | false |  | A positive (greater than zero) integer for the amount of `duration_unit` the task will take. If specified, you **must** define a `duration_unit`. |
+| `task-duration-unit` | false |  | The unit of time that the `duration` field above represents. Must be either `minute` or `day`. If specified, `duration` **must** be defined as well. |
+| `task-labels` | false |  | The task's labels (a list of names that may represent either personal or shared labels). |
+| `task-order` | false |  | Non-zero integer value used by clients to sort tasks under the same parent. |
+| `task-parent-id` | false |  | Parent task ID. |
+| `task-priority` | false |  | Task priority from 1 (normal) to 4 (urgent). |
+| `task-project-id` | false |  | Task project ID. If not set, task is put to user's Inbox. |
+| `task-section-id` | false |  | ID of section to put task into. |
+
 <!--(inputs-end)-->
 
 # Usage
