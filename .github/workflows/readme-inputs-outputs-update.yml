@@ -15,8 +15,9 @@ jobs:
         uses: mdvorak/update-action-readme@v1
 
       - name: Create pull request
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v6
         with:
           branch: readme-inputs-outputs-update-${{ github.ref_name }}
+          body: ''
           commit-message: "readme: update inputs / outputs tables"
-          title: "README: Update Inputs / Outputs on ${{ github.ref_name }}"
+          title: "README: Update Inputs / Outputs (on ${{ github.ref_name }})"
