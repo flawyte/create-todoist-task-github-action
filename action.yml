@@ -1,6 +1,10 @@
 name: 'Todoist: Create Task'
 author: 'Mickaël Allonneau'
-description: 'Creates a task in Todoist'
+description: 'Create a task in Todoist'
+
+branding:
+  color: 'red'
+  icon: 'check-circle'
 
 # Inputs' descriptions are taken from the official Todoist API documentation: https://developer.todoist.com/rest/v2/#create-a-new-task
 inputs:
