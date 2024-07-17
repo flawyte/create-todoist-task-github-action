@@ -1,6 +1,6 @@
 # Inputs
 
-Input descriptions are taken from the [official Todoist API documentation](https://developer.todoist.com/rest/v2/#create-a-new-task).
+Input descriptions are taken from the [official Todoist API documentation](https://developer.todoist.com/rest/v2/#create-a-new-task). Text in square brackets [] has been added or modified by me.
 
 <!--(inputs-start)-->
 
