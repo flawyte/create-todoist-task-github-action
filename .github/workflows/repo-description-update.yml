@@ -1,0 +1,20 @@
+name: 'GitHub Repo: Update description from README'
+on: [workflow_dispatch]
+
+jobs:
+  update-repo-description:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v4
+
+      - name: 'Get description from README'
+        id: get-description
+        uses: rtvu/get-description-from-readme-action@v1.0.1
+
+      - name: 'Update repository description'
+        uses: rtvu/set-repository-description-action@v1.0.1
+        with:
+          description: ${{ steps.get-description.outputs.description }}
+          repository: ${{ github.repository }}
+          token: ${{ secrets.REPOSITORY_PAT }}
